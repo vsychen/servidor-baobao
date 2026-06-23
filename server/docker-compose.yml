@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    # restart: always
+    environment:
+      POSTGRES_USER: ${SUSER_NAME}
+      POSTGRES_PASSWORD: ${SUSER_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - minha-rede-app
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  servidor:
+#    build: .
+#    container_name: baobao-server
+#    environment:
+#      POSTGRES_DB: ${DATABASE_NAME}
+#      APP_USER: ${APP_NAME}
+#      APP_PASSWORD: ${APP_PASSWORD}
+#      JAVA_OPTS: "-Xmx512m -Xms256m"
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - minha-rede-app
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+
+volumes:
+  postgres_data:
+
+networks:
+  minha-rede-app:
+    driver: bridge

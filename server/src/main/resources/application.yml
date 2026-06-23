@@ -1,0 +1,45 @@
+spring:
+  config:
+    import: "optional:file:.env[.properties]"
+  application:
+    name: baobao-server
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${APP_NAME}
+    password: ${APP_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+
+cors:
+  allowed-origins: http://localhost:3000
+
+security:
+  public-paths: /auth/**,/public/**,/produtos/**
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  tomcat:
+    url-encoding: UTF-8
+
+logging:
+  level:
+    root: INFO
+    br.com.baobao: DEBUG
